@@ -7,9 +7,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs,home-manager } @ inputs: let
+  outputs = { self, nixpkgs,home-manager,nix-darwin,... } @ inputs: let
     system = "aarch64-darwin";
     pkgs = import nixpkgs { inherit system; };
 
@@ -23,8 +27,15 @@
        nix flake update
        echo "Updating home-manager..."
        nix run nixpkgs#home-manager -- switch --flake .#myHomeConfig
+       echo "Updating nix-darwin..."
+       nix run nix-darwin -- switch --flake .#darwin
        echo "Update complete!"
      '');
+    };
+
+    darwinConfigurations.darwin = nix-darwin.lib.darwinSystem {
+      system = system;
+      modules = [ ./nix/nix-darwin ];
     };
 
     homeConfigurations = {
@@ -34,7 +45,7 @@
           inherit inputs;
         };
         modules = [
-          ./.config/home-manager/home.nix
+          ./nix/home-manager
         ];
       };
     };
