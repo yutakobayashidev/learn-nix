@@ -3,9 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: let
+  outputs = { self, nixpkgs,home-manager } @ inputs: let
     system = "aarch64-darwin";
     pkgs = nixpkgs.legacyPackages.${system};
 
@@ -28,6 +32,21 @@
        nix profile upgrade my-packages
        echo "Update complete!"
      '');
-   };
+    };
+
+    homeConfigurations = {
+      myHomeConfig = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = system;
+        };
+        extraSpecialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./.config/home-manager/home.nix
+        ];
+      };
+    };
+   
   };
 }
