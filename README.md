@@ -1,4 +1,5 @@
 - Attic
 - CI 
 - home-manager
+- nix-darwin
 - Nix flakes

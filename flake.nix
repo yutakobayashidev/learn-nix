@@ -5,13 +5,29 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }: {
-    packages.aarch64-darwin.my-packages = nixpkgs.legacyPackages.aarch64-darwin.buildEnv {
+  outputs = { self, nixpkgs }: let
+    system = "aarch64-darwin";
+    pkgs = nixpkgs.legacyPackages.${system};
+
+   in {
+    packages.${system}.my-packages = pkgs.buildEnv {
       name = "my-packages-list";
-      paths = [
-        nixpkgs.legacyPackages.aarch64-darwin.git
-        nixpkgs.legacyPackages.aarch64-darwin.curl
+      paths = with pkgs; [
+        git
+        curl
       ];
     };
+
+    apps.${system}.update = {
+     type = "app";
+     program = toString (pkgs.writeShellScript "update-script" ''
+       set -e
+       echo "Updating flake..."
+       nix flake update
+       echo "Updating profile..."
+       nix profile upgrade my-packages
+       echo "Update complete!"
+     '');
+   };
   };
 }
