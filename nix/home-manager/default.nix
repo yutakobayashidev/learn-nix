@@ -4,10 +4,12 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   username = "yuta";
-in {
-  
+in
+{
+
   imports = [ inputs._1password-shell-plugins.hmModules.default ];
 
   nixpkgs = {
@@ -26,6 +28,7 @@ in {
     stateVersion = "25.05";
 
     packages = with pkgs; [
+      nixfmt-rfc-style
       git
       curl
     ];
@@ -40,7 +43,11 @@ in {
     enable = true;
     # the specified packages as well as 1Password CLI will be
     # automatically installed and configured to use shell plugins
-    plugins = with pkgs; [ gh awscli2 openai ];
+    plugins = with pkgs; [
+      gh
+      awscli2
+      openai
+    ];
   };
 
 }

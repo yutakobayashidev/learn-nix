@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
 
   nix.enable = false; # determinate
 
@@ -8,10 +9,10 @@
       hackgen-nf-font
     ];
   };
-    
+
   system = {
     stateVersion = 6;
-    
+
     defaults = {
       controlcenter.BatteryShowPercentage = true;
       NSGlobalDomain = {
@@ -73,5 +74,5 @@
       # cleanup = "uninstall";
     };
   };
-  
+
 }
