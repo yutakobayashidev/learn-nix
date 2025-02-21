@@ -1,12 +1,9 @@
 {pkgs, ...}: {
 
-  # nix configuration
-  nix = {
-    optimise.automatic = true;
-    settings = {
-      experimental-features = "nix-command flakes";
-      max-jobs = 8;
-    };
+  nix.enable = false; # determinate
+    
+  system = {
+    stateVersion = 6;
   };
-  services.nix-daemon.enable = true;
+
 }
