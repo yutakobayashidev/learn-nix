@@ -1,1 +1,4 @@
 result
+
+wallpapers/*
+!wallpapers/README.md
