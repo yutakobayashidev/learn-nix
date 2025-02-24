@@ -31,6 +31,7 @@ in
       nixfmt-rfc-style
       git
       curl
+      fastfetch
     ];
 
   };
